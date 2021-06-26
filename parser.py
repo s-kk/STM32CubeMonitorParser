@@ -34,27 +34,27 @@ for i in range(len(data_raw)):
     if data_raw[i]['variablename'] == variable_list[target_variable]:
         filtered_variable.append(data_raw[i])
 
-# access hierarchy: given_current[i]['variabledata'][j]['x']
+# access hierarchy: arr[i]['variabledata'][j]['x']
 for i in range(len(filtered_variable)):
     for j in range(len(filtered_variable[i]['variabledata'])):
         target_variable_list.append([filtered_variable[i]['variabledata'][j]['x'],
                                      filtered_variable[i]['variabledata'][j]['y']])
 
-target_variable_array = np.array(target_variable_list)
+target_variable_array = np.array(target_variable_list, dtype=float)
 
 if input('Would you like to align the timestamp? (y/n) ') == 'y':
-    # sort data
-    print('Aligning ...')
+    # neutralize timestamp
+    print('Aligning...')
     target_variable_array = target_variable_array - init_timestamp
 
 if input('Would you like to export the data sorted by timestamp? (y/n) ') == 'y':
     # sort data
-    print('Sorting ...')
+    print('Sorting...')
     target_variable_array = target_variable_array[target_variable_array[:, 0].argsort()]
     save_path = os.path.join("data", variable_list[target_variable] + '_sorted.csv')
-    np.savetxt(save_path, target_variable_array.astype(int), fmt='%i', delimiter=',')
+    np.savetxt(save_path, target_variable_array.astype(float), fmt=['%i', '%.17f'], delimiter=',')
     print('Success!')
 else:
     save_path = os.path.join("data", variable_list[target_variable] + '.csv')
-    np.savetxt(save_path, target_variable_array.astype(int), fmt='%i', delimiter=',')
+    np.savetxt(save_path, target_variable_array.astype(float), fmt=['%i', '%.16f'], delimiter=',')
     print('Success!')
